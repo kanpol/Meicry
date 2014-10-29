@@ -5,25 +5,26 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-        <ImageButton android:id="@+id/btn_back"
-                     android:layout_width="50dp"
-                     android:layout_height="50dp"
-                     android:layout_alignParentLeft="true"
-                     android:layout_marginLeft="10dp"
-                     android:layout_marginTop="5dp"
-                     android:background="@drawable/button_back"/>
-        <ImageButton android:id="@+id/btn_flash_mode"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_centerHorizontal="true"
-                     android:background="@drawable/head"/>
-        <ImageButton android:id="@+id/btn_setting"
-                     android:layout_width="50dp"
-                     android:layout_height="50dp"
-                     android:layout_alignParentRight="true"
-                     android:layout_marginRight="10dp"
-                     android:layout_marginTop="5dp"
-                     android:background="@drawable/button_setting"/>
+        <Button android:id="@+id/btn_back"
+                 android:layout_width="50dp"
+                 android:layout_height="50dp"
+                 android:layout_alignParentLeft="true"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginTop="5dp"
+                 android:background="@drawable/button_back"/>
+        <com.example.CameraDemo.TriButton
+                android:id="@+id/btn_flash_mode"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:background="@drawable/head"/>
+        <Button android:id="@+id/btn_setting"
+                 android:layout_width="50dp"
+                 android:layout_height="50dp"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginTop="5dp"
+                 android:background="@drawable/button_setting"/>
     </RelativeLayout>
 	<RelativeLayout 
 	    android:layout_width="fill_parent"

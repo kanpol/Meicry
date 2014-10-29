@@ -28,6 +28,7 @@ public class TakePhotoActivity extends Activity {
 	private Camera camera;
 	private File picture;
 	private Button btnSave;
+    private TriButton btnFlashMode;
     private int cameraPosition = 1;
 
 	@Override
@@ -67,6 +68,35 @@ public class TakePhotoActivity extends Activity {
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(surfaceCallback);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        btnFlashMode = (TriButton) findViewById(R.id.btn_flash_mode);
+        btnFlashMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int state = btnFlashMode.getState();
+                Camera.Parameters parameters = camera.getParameters();
+                if (state == 0) {
+                    if (parameters.getSupportedFlashModes().contains(
+                            Camera.Parameters.FLASH_MODE_AUTO)) {
+                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_AUTO);
+                        Toast.makeText(TakePhotoActivity.this, "Auto flash turn on", Toast.LENGTH_SHORT).show();
+                    }
+                } else if (state == 1) {
+                    if (parameters.getSupportedFlashModes().contains(
+                            Camera.Parameters.FLASH_MODE_ON)) {
+                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_ON);
+                        Toast.makeText(TakePhotoActivity.this, "Flash turn on", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (parameters.getSupportedFlashModes().contains(
+                            Camera.Parameters.FLASH_MODE_OFF)) {
+                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_OFF);
+                        Toast.makeText(TakePhotoActivity.this, "Flash turn off", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                camera.setParameters(parameters);
+            }
+        });
 
 		btnSave = (Button) findViewById(R.id.take);
 
@@ -153,27 +183,30 @@ public class TakePhotoActivity extends Activity {
 	Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
 		// @Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			// new SavePictureTask().execute(data);
+
+            Log.i("xxxxxxxxx", TakePhotoActivity.this.getCacheDir().getAbsolutePath());
+            String cachePhoto = TakePhotoActivity.this.getCacheDir().getAbsolutePath() + "/" + "tmp.bmp";
+			//new SavePictureTask().execute(data);
 
 			/* onPictureTaken传入的第一个参数即为相片的byte */
 			
 			/*picture = new File(Environment.getExternalStorageDirectory() + "/"
                     + System.currentTimeMillis() + ".jpg");
 
-			try {
 
-				FileOutputStream fos=new FileOutputStream(picture);
-	            fos.write(data); 
-	            fos.close(); 
-				Toast.makeText(TakePhotoActivity.this, "拍照结束,请查看" + picture.toString(), Toast.LENGTH_SHORT).show();
-
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}*/
 //			camera.startPreview();
  /*           byte[] newdata = new byte[data.length];
             System.arraycopy(data, 0, newdata, 0, data.length);*/
+
+            try {
+                FileOutputStream fos = new FileOutputStream(cachePhoto);
+                fos.write(data);
+                fos.close();
+                Toast.makeText(TakePhotoActivity.this, "拍照结束,请查看" + cachePhoto.toString(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             Intent intent = new Intent(TakePhotoActivity.this, PhotoPreview.class);
             //intent.putExtra("photo_data", newdata);
             TakePhotoActivity.this.startActivity(intent);

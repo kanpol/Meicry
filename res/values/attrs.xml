@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TriButton">
+        <attr name="state_one" format="integer"/>
+        <attr name="state_two" format="integer"/>
+        <attr name="state_three" format="integer"/>
+    </declare-styleable>
+</resources>
