@@ -9,7 +9,7 @@
               android:background="@drawable/photo_mask_list_item_bg"
               android:layout_gravity="center">
     <ImageView android:id="@+id/iv_mask"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:src="@drawable/circle"/>
+               android:layout_width="70dp"
+               android:layout_height="75dp"
+               android:scaleType="centerInside"/>
 </LinearLayout>

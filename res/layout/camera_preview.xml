@@ -1,108 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+	>
+    <RelativeLayout
+        android:id="@+id/camera_top"
+        android:layout_width="match_parent" 
+        android:layout_height="35dp"
+        android:layout_alignParentTop="true">
         <Button android:id="@+id/btn_back"
-                 android:layout_width="50dp"
-                 android:layout_height="50dp"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
                  android:layout_alignParentLeft="true"
                  android:layout_marginLeft="10dp"
-                 android:layout_marginTop="5dp"
-                 android:background="@drawable/button_back"/>
+                 android:background="@drawable/back"/>
         <com.example.CameraDemo.TriButton
                 android:id="@+id/btn_flash_mode"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
                  android:layout_centerHorizontal="true"
-                 android:background="@drawable/head"/>
+                 android:background="@drawable/flashlight_auto"/>
         <Button android:id="@+id/btn_setting"
-                 android:layout_width="50dp"
-                 android:layout_height="50dp"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
                  android:layout_alignParentRight="true"
                  android:layout_marginRight="10dp"
-                 android:layout_marginTop="5dp"
-                 android:background="@drawable/button_setting"/>
+                 android:background="@drawable/set"/>
     </RelativeLayout>
-	<RelativeLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dip"
-        android:background="@drawable/photo_frame"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-	    android:layout_weight="1">
-	    <SurfaceView
-	        android:id="@+id/takePicturePreview"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="35dp"
-	        />
-	     <ImageView
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp"
-            android:scaleType="fitXY"
-	        android:src="@drawable/photo_mask"
-	        android:alpha="0.5"
-	        />
-	</RelativeLayout>
     
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-            <com.example.CameraDemo.HorizontalListView
-                    android:id="@+id/hlv_mask_list"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_alignParentLeft="true">
-            </com.example.CameraDemo.HorizontalListView>
-        </RelativeLayout>
-     <!--   <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-            <com.example.CameraDemo.HorizontalListView
-                    android:id="@+id/hlv_template_list"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="90dp">
-            </com.example.CameraDemo.HorizontalListView>
-            <ImageButton android:layout_width="wrap_content"
-                         android:layout_height="80dp"
-                         android:layout_alignParentRight="true"
-                         android:src="@drawable/head"/>
-        </RelativeLayout>-->
-    </RelativeLayout>
-    <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="bottom">
-        <Button android:id="@+id/xxxxx"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+    <FrameLayout android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:layout_below="@id/camera_top"
+        android:layout_above="@id/hlv_mask_list"
+        android:layout_centerHorizontal="true" >
+		<RelativeLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+	        android:background="@drawable/photo_frame"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp">
+		    <SurfaceView
+		        android:id="@+id/takePicturePreview"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:layout_marginTop="10dp"
+	            android:layout_marginBottom="35dp"
+		        />
+
+		     <ImageView
+		         android:id="@+id/takeMask"
+		         android:layout_width="fill_parent"
+		         android:layout_height="fill_parent"
+		         android:layout_alignTop="@+id/takePicturePreview"
+		         android:layout_marginBottom="35dp"
+		         android:layout_marginLeft="15dp"
+		         android:layout_marginRight="15dp"
+		         android:alpha="0.5"
+		         android:scaleType="fitXY" />
+
+		</RelativeLayout>
+	
+    </FrameLayout>
+    
+    
+     
+    <RelativeLayout android:id="@+id/camera_bottom"
+        	android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+        <Button android:id="@+id/more"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:text="更多" />
+                android:background="@drawable/moretheme" />
         <Button android:id="@+id/take"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:layout_centerHorizontal="true"
-                android:text="拍照" />
+                android:background="@drawable/photo" />
         <Button
                 android:id="@+id/change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentRight="true"
-                android:text="切换" />
-        </RelativeLayout>
-</LinearLayout>
+                android:background="@drawable/orbitcam" />
+    </RelativeLayout>
+    
+    <com.example.CameraDemo.HorizontalListView
+            android:id="@+id/hlv_mask_list"
+            android:background="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_above="@id/camera_bottom">
+    </com.example.CameraDemo.HorizontalListView>
+    	<RelativeLayout android:layout_width="fill_parent"
+    	    android:id="@+id/grid_view_bg"
+		    android:layout_height="200dp"
+	        android:background="@null"
+	        android:layout_above="@id/camera_bottom">
+		    <GridView android:layout_width="wrap_content"  
+                android:layout_height="wrap_content"  
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:numColumns="auto_fit"
+                android:columnWidth="90dp" 
+                android:horizontalSpacing="5dp"
+                android:verticalSpacing="5dp"
+                android:gravity="center"
+                android:stretchMode="columnWidth"
+                android:id="@+id/grid_view"
+                android:visibility="gone">
+		        
+		    </GridView>
+		</RelativeLayout>
+</RelativeLayout>

@@ -1,20 +1,32 @@
 package com.example.CameraDemo;
 
+import android.R.drawable;
+import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,39 +40,82 @@ public class TakePhotoActivity extends Activity {
 	private Camera camera;
 	private File picture;
 	private Button btnSave;
-    private TriButton btnFlashMode;
-    private int cameraPosition = 1;
+	private TriButton btnFlashMode;
+	private int cameraPosition = 1;
+	private int touchTime = 0;
+
+	public Integer[] mThumbIds = { R.drawable.cat, R.drawable.addtheme };
+
+	public Integer[] mThemeItems = { R.drawable.cat_1, R.drawable.cat_2,
+			R.drawable.cat_3, R.drawable.cat_4, R.drawable.cat_5, };
+
+	public Integer[] mMaskItems = { R.drawable.cat_1_mask,
+			R.drawable.cat_2_mask, R.drawable.cat_3_mask,
+			R.drawable.cat_4_mask, R.drawable.cat_5_mask, };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
-		 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		 this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.camera_preview);
 		setupViews();
 
-        HorizontalListView hlv = (HorizontalListView) findViewById(R.id.hlv_mask_list);
-        hlv.setAdapter(maskAdapter);
-/*        HorizontalListView thlv = (HorizontalListView) findViewById(R.id.hlv_template_list);
-        thlv.setAdapter(baseAdapter);*/
+		GridView gridView = (GridView) findViewById(R.id.grid_view);
+
+		// Instance of ImageAdapter Class
+		gridView.setAdapter(new ImageAdapter(this, mThumbIds));
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				View gridView = (View) findViewById(R.id.grid_view);
+				gridView.setVisibility(View.GONE);
+				View relativeLayout = (View) findViewById(R.id.grid_view_bg);
+				relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+				HorizontalListView hlv = (HorizontalListView) findViewById(R.id.hlv_mask_list);
+				hlv.setVisibility(View.VISIBLE);
+			}
+		});
+
+		HorizontalListView hlv = (HorizontalListView) findViewById(R.id.hlv_mask_list);
+		hlv.setAdapter(maskAdapter);
+		hlv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				ImageView image = (ImageView) TakePhotoActivity.this
+						.findViewById(R.id.takeMask);
+				image.setImageResource(mMaskItems[arg2]);
+
+			}
+
+		});
+		/*
+		 * HorizontalListView thlv = (HorizontalListView)
+		 * findViewById(R.id.hlv_template_list); thlv.setAdapter(baseAdapter);
+		 */
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		try {
-            if (camera != null) {
-                camera.stopPreview();// stop preview
-                camera.release(); // Release camera resources
-                camera = null;
-            }
+			if (camera != null) {
+				camera.stopPreview();// stop preview
+				camera.release(); // Release camera resources
+				camera = null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void setupViews() {
@@ -69,34 +124,41 @@ public class TakePhotoActivity extends Activity {
 		surfaceHolder.addCallback(surfaceCallback);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-        btnFlashMode = (TriButton) findViewById(R.id.btn_flash_mode);
-        btnFlashMode.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int state = btnFlashMode.getState();
-                Camera.Parameters parameters = camera.getParameters();
-                if (state == 0) {
-                    if (parameters.getSupportedFlashModes().contains(
-                            Camera.Parameters.FLASH_MODE_AUTO)) {
-                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_AUTO);
-                        Toast.makeText(TakePhotoActivity.this, "Auto flash turn on", Toast.LENGTH_SHORT).show();
-                    }
-                } else if (state == 1) {
-                    if (parameters.getSupportedFlashModes().contains(
-                            Camera.Parameters.FLASH_MODE_ON)) {
-                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_ON);
-                        Toast.makeText(TakePhotoActivity.this, "Flash turn on", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if (parameters.getSupportedFlashModes().contains(
-                            Camera.Parameters.FLASH_MODE_OFF)) {
-                        parameters.setFlashMode( Camera.Parameters.FLASH_MODE_OFF);
-                        Toast.makeText(TakePhotoActivity.this, "Flash turn off", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                camera.setParameters(parameters);
-            }
-        });
+		btnFlashMode = (TriButton) findViewById(R.id.btn_flash_mode);
+		btnFlashMode.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int state = btnFlashMode.getState();
+				Camera.Parameters parameters = camera.getParameters();
+				if (state == 0) {
+					if (parameters.getSupportedFlashModes().contains(
+							Camera.Parameters.FLASH_MODE_AUTO)) {
+						parameters
+								.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+						Toast.makeText(TakePhotoActivity.this,
+								"Auto flash turn on", Toast.LENGTH_SHORT)
+								.show();
+					}
+				} else if (state == 1) {
+					if (parameters.getSupportedFlashModes().contains(
+							Camera.Parameters.FLASH_MODE_ON)) {
+						parameters
+								.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+						Toast.makeText(TakePhotoActivity.this, "Flash turn on",
+								Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					if (parameters.getSupportedFlashModes().contains(
+							Camera.Parameters.FLASH_MODE_OFF)) {
+						parameters
+								.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+						Toast.makeText(TakePhotoActivity.this,
+								"Flash turn off", Toast.LENGTH_SHORT).show();
+					}
+				}
+				camera.setParameters(parameters);
+			}
+		});
 
 		btnSave = (Button) findViewById(R.id.take);
 
@@ -105,78 +167,110 @@ public class TakePhotoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				takePic();
+
 			}
 		});
 
-        Button btnChange = (Button) findViewById(R.id.change);
-        btnChange.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int cameraCount = 0;
-                Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-                cameraCount = Camera.getNumberOfCameras();//得到摄像头的个数
+		Button btnMore = (Button) findViewById(R.id.more);
+		btnMore.setOnClickListener(new OnClickListener() {
 
-                for (int i = 0; i < cameraCount; i++) {
-                    Camera.getCameraInfo(i, cameraInfo);//得到每一个摄像头的信息
-                    if (cameraPosition == 1) {
-                        //现在是后置，变更为前置
-                        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {//代表摄像头的方位，CAMERA_FACING_FRONT前置      CAMERA_FACING_BACK后置
-                            camera.stopPreview();//停掉原来摄像头的预览
-                            camera.release();//释放资源
-                            camera = null;//取消原来摄像头
-                            camera = Camera.open(i);//打开当前选中的摄像头
-                            try {
-                                camera.setPreviewDisplay(surfaceHolder);//通过surfaceview显示取景画面
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                            Camera.Parameters parameters = camera.getParameters();
-                            parameters.setPictureFormat(PixelFormat.JPEG);
-                            camera.setDisplayOrientation(90);
-                            camera.setParameters(parameters); // Setting camera parameters
-                            camera.startPreview();//开始预览
-                            cameraPosition = 0;
-                            break;
-                        }
-                    } else {
-                        //现在是前置， 变更为后置
-                        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {//代表摄像头的方位，CAMERA_FACING_FRONT前置      CAMERA_FACING_BACK后置
-                            camera.stopPreview();//停掉原来摄像头的预览
-                            camera.release();//释放资源
-                            camera = null;//取消原来摄像头
-                            camera = Camera.open(i);//打开当前选中的摄像头
-                            try {
-                                camera.setPreviewDisplay(surfaceHolder);//通过surfaceview显示取景画面
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                            Camera.Parameters parameters = camera.getParameters();
-                            parameters.setPictureFormat(PixelFormat.JPEG);
-                            camera.setDisplayOrientation(90);
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if (touchTime % 2 == 0) {
+					View gridView = (View) findViewById(R.id.grid_view);
+					View relativeLayout = (View) findViewById(R.id.grid_view_bg);
+					relativeLayout.setBackgroundColor(Color
+							.parseColor("#aa696969"));
+					gridView.setVisibility(View.VISIBLE);
+					HorizontalListView hlv = (HorizontalListView) findViewById(R.id.hlv_mask_list);
+					hlv.setVisibility(View.GONE);
+				} else {
+					View gridView = (View) findViewById(R.id.grid_view);
+					gridView.setVisibility(View.GONE);
+					View relativeLayout = (View) findViewById(R.id.grid_view_bg);
+					relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+					HorizontalListView hlv = (HorizontalListView) findViewById(R.id.hlv_mask_list);
+					hlv.setVisibility(View.VISIBLE);
+				}
+				touchTime += 1;
+			}
+		});
 
-                            camera.setParameters(parameters); // Setting camera parameters
-                            camera.startPreview();//开始预览
-                            cameraPosition = 1;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
+		Button btnChange = (Button) findViewById(R.id.change);
+		btnChange.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int cameraCount = 0;
+				Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+				cameraCount = Camera.getNumberOfCameras();// 得到摄像头的个数
+
+				for (int i = 0; i < cameraCount; i++) {
+					Camera.getCameraInfo(i, cameraInfo);// 得到每一个摄像头的信息
+					if (cameraPosition == 1) {
+						// 现在是后置，变更为前置
+						if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {// 代表摄像头的方位，CAMERA_FACING_FRONT前置
+																							// CAMERA_FACING_BACK后置
+							camera.stopPreview();// 停掉原来摄像头的预览
+							camera.release();// 释放资源
+							camera = null;// 取消原来摄像头
+							camera = Camera.open(i);// 打开当前选中的摄像头
+							try {
+								camera.setPreviewDisplay(surfaceHolder);// 通过surfaceview显示取景画面
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Camera.Parameters parameters = camera
+									.getParameters();
+							parameters.setPictureFormat(PixelFormat.JPEG);
+							camera.setDisplayOrientation(90);
+							camera.setParameters(parameters); // Setting camera
+																// parameters
+							camera.startPreview();// 开始预览
+							cameraPosition = 0;
+							break;
+						}
+					} else {
+						// 现在是前置， 变更为后置
+						if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {// 代表摄像头的方位，CAMERA_FACING_FRONT前置
+																						// CAMERA_FACING_BACK后置
+							camera.stopPreview();// 停掉原来摄像头的预览
+							camera.release();// 释放资源
+							camera = null;// 取消原来摄像头
+							camera = Camera.open(i);// 打开当前选中的摄像头
+							try {
+								camera.setPreviewDisplay(surfaceHolder);// 通过surfaceview显示取景画面
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Camera.Parameters parameters = camera
+									.getParameters();
+							parameters.setPictureFormat(PixelFormat.JPEG);
+							camera.setDisplayOrientation(90);
+
+							camera.setParameters(parameters); // Setting camera
+																// parameters
+							camera.startPreview();// 开始预览
+							cameraPosition = 1;
+							break;
+						}
+					}
+				}
+			}
+		});
 	}
 
 	private void takePic() {
-//		camera.stopPreview();// stop the preview
+		// camera.stopPreview();// stop the preview
 		try {
 			camera.takePicture(null, null, pictureCallback); // picture
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	// Photo call back
@@ -184,32 +278,41 @@ public class TakePhotoActivity extends Activity {
 		// @Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 
-            Log.i("xxxxxxxxx", TakePhotoActivity.this.getCacheDir().getAbsolutePath());
-            String cachePhoto = TakePhotoActivity.this.getCacheDir().getAbsolutePath() + "/" + "tmp.bmp";
-			//new SavePictureTask().execute(data);
+			Log.i("xxxxxxxxx", TakePhotoActivity.this.getCacheDir()
+					.getAbsolutePath());
+			String cachePhoto = TakePhotoActivity.this.getFilesDir() + "/"
+					+ "tmp.jpg";
 
-			/* onPictureTaken传入的第一个参数即为相片的byte */
-			
-			/*picture = new File(Environment.getExternalStorageDirectory() + "/"
-                    + System.currentTimeMillis() + ".jpg");
+			Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+			Bitmap dst = null;
+			Configuration config = getResources().getConfiguration();
+			if (config.orientation == 1) {
+				Matrix matrix = new Matrix();
+				matrix.reset();
+				matrix.postRotate(90);
+				dst = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+						bitmap.getHeight(), matrix, true);
+			}
 
+			try {
+				destoryBitmap(bitmap);
+				BufferedOutputStream fos = new BufferedOutputStream(
+						new FileOutputStream(cachePhoto));
+				dst.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				fos.flush();
+				fos.close();
+				Toast.makeText(TakePhotoActivity.this,
+						"拍照结束,请查看" + cachePhoto.toString(), Toast.LENGTH_SHORT)
+						.show();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-//			camera.startPreview();
- /*           byte[] newdata = new byte[data.length];
-            System.arraycopy(data, 0, newdata, 0, data.length);*/
-
-            try {
-                FileOutputStream fos = new FileOutputStream(cachePhoto);
-                fos.write(data);
-                fos.close();
-                Toast.makeText(TakePhotoActivity.this, "拍照结束,请查看" + cachePhoto.toString(), Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Intent intent = new Intent(TakePhotoActivity.this, PhotoPreview.class);
-            //intent.putExtra("photo_data", newdata);
-            TakePhotoActivity.this.startActivity(intent);
+			Intent intent = new Intent(TakePhotoActivity.this,
+					PhotoPreview.class);
+			// intent.putExtra("photo_data", newdata);
+			intent.putExtra("image_path", cachePhoto);
+			TakePhotoActivity.this.startActivity(intent);
 		}
 	};
 
@@ -221,14 +324,14 @@ public class TakePhotoActivity extends Activity {
 			Log.i(TAG, "surfaceCallback====");
 			camera = Camera.open(); // Turn on the camera
 			try {
-				if(holder!=null)
-				camera.setPreviewDisplay(holder); // Set Preview
+				if (holder != null)
+					camera.setPreviewDisplay(holder); // Set Preview
 			} catch (IOException e) {
 				e.printStackTrace();
 				camera.release();// release camera
 				camera = null;
 			}
-			
+
 		}
 
 		public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -236,93 +339,100 @@ public class TakePhotoActivity extends Activity {
 			Log.i(TAG, "====surfaceChanged");
 			Camera.Parameters parameters = camera.getParameters();
 			parameters.setPictureFormat(PixelFormat.JPEG);
-            camera.setDisplayOrientation(90);
+			camera.setDisplayOrientation(90);
 
-            if (parameters.getSupportedFocusModes().contains(
-                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                camera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        Log.i("xxxxxxxxxxxxxxx", String.valueOf(success));
-                    }
-                });
-            }
+			if (parameters.getSupportedFocusModes().contains(
+					Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+				parameters
+						.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+				camera.autoFocus(new Camera.AutoFocusCallback() {
+					@Override
+					public void onAutoFocus(boolean success, Camera camera) {
+						Log.i("xxxxxxxxxxxxxxx", String.valueOf(success));
+					}
+				});
+			}
 
-            if (parameters.getSupportedFlashModes().contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-            }
+			// if
+			// (parameters.getSupportedFlashModes().contains(Camera.Parameters.FLASH_MODE_AUTO))
+			// {
+
+			// parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+			// }
 			// parameters.set("rotation", 180); // Arbitrary rotation
 			// camera.setDisplayOrientation(0);
-//			parameters.setPreviewSize(400, 300); // Set Photo Size
+			// parameters.setPreviewSize(400, 300); // Set Photo Size
 			camera.setParameters(parameters); // Setting camera parameters
 			camera.startPreview(); // Start Preview
 		}
 
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			Log.i(TAG, "====surfaceDestroyed");
-//			try {
-                if (camera != null) {
-                    camera.setPreviewCallback(null);
-                    camera.stopPreview();// stop preview
-                    camera.release(); // Release camera resources
-                    camera = null;
-                }
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				e.printStackTrace();
-//			}
-			
+			// try {
+			if (camera != null) {
+				camera.setPreviewCallback(null);
+				camera.stopPreview();// stop preview
+				camera.release(); // Release camera resources
+				camera = null;
+			}
+			// } catch (Exception e) {
+			// // TODO: handle exception
+			// e.printStackTrace();
+			// }
+
 		}
 	};
 
-    private BaseAdapter maskAdapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
-            return 10;
-        }
+	private BaseAdapter maskAdapter = new BaseAdapter() {
+		@Override
+		public int getCount() {
+			return mThemeItems.length;
+		}
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
+		@Override
+		public Object getItem(int position) {
+			return null;
+		}
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.photo_mask_list_item, null);
-            ImageView img = (ImageView) view.findViewById(R.id.iv_mask);
-            return view;
-        }
-    };
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view = LayoutInflater.from(parent.getContext()).inflate(
+					R.layout.photo_mask_list_item, null);
+			ImageView img = (ImageView) view.findViewById(R.id.iv_mask);
+			img.setImageResource(mThemeItems[position]);
+			return view;
+		}
+	};
 
- /*   private BaseAdapter baseAdapter = new BaseAdapter() {
-        @Override
-        public int getCount() {
-            return 10;
-        }
+	/*
+	 * private BaseAdapter baseAdapter = new BaseAdapter() {
+	 * 
+	 * @Override public int getCount() { return 10; }
+	 * 
+	 * @Override public Object getItem(int position) { return null; }
+	 * 
+	 * @Override public long getItemId(int position) { return 0; }
+	 * 
+	 * @Override public View getView(int position, View convertView, ViewGroup
+	 * parent) { View view = LayoutInflater.from(parent.getContext())
+	 * .inflate(R.layout.photo_mask_list_item, null); ImageView img =
+	 * (ImageView) view.findViewById(R.id.iv_mask); return view; } };
+	 */
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.photo_mask_list_item, null);
-            ImageView img = (ImageView) view.findViewById(R.id.iv_mask);
-            return view;
-        }
-    };*/
+	public void destoryBitmap(Bitmap bitmap) {
+		try {
+			if (bitmap != null && !bitmap.isRecycled()) {
+				bitmap.recycle();
+				bitmap = null;
+			}
+			System.gc();
+		} catch (Exception e) {
+			Log.e("bad thing happened", e.toString(), e);
+		}
+	}
 }
