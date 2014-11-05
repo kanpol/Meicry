@@ -12,7 +12,6 @@ public class XCameraDemo extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.main);
-
+        setContentView(R.layout.home_photo_item);
     }
 }

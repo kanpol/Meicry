@@ -3,7 +3,8 @@ package com.example.CameraDemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.PixelFormat;
+import android.content.res.Configuration;
+import android.graphics.*;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -185,22 +187,28 @@ public class TakePhotoActivity extends Activity {
 		public void onPictureTaken(byte[] data, Camera camera) {
 
             Log.i("xxxxxxxxx", TakePhotoActivity.this.getCacheDir().getAbsolutePath());
-            String cachePhoto = TakePhotoActivity.this.getCacheDir().getAbsolutePath() + "/" + "tmp.bmp";
-			//new SavePictureTask().execute(data);
+            String cachePhoto = TakePhotoActivity.this.getFilesDir() + "/" + "tmp.jpg";
 
-			/* onPictureTaken传入的第一个参数即为相片的byte */
-			
-			/*picture = new File(Environment.getExternalStorageDirectory() + "/"
-                    + System.currentTimeMillis() + ".jpg");
-
-
-//			camera.startPreview();
- /*           byte[] newdata = new byte[data.length];
-            System.arraycopy(data, 0, newdata, 0, data.length);*/
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            Bitmap dst = null;
+            Configuration config = getResources().getConfiguration();
+            if (config.orientation == 1) {
+                Matrix matrix = new Matrix();
+                matrix.reset();
+                matrix.postRotate(90);
+                dst = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            }
 
             try {
-                FileOutputStream fos = new FileOutputStream(cachePhoto);
-                fos.write(data);
+            	destoryBitmap(bitmap);
+                Bitmap res = Bitmap.createBitmap(bitmap.getWidth() + 40, bitmap.getHeight() + 50, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(res);
+                canvas.drawColor(Color.WHITE);
+                BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cachePhoto));
+                res.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                destoryBitmap(res);
+                destoryBitmap(dst);
+                fos.flush();
                 fos.close();
                 Toast.makeText(TakePhotoActivity.this, "拍照结束,请查看" + cachePhoto.toString(), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
@@ -209,6 +217,7 @@ public class TakePhotoActivity extends Activity {
 
             Intent intent = new Intent(TakePhotoActivity.this, PhotoPreview.class);
             //intent.putExtra("photo_data", newdata);
+            intent.putExtra("image_path", cachePhoto);
             TakePhotoActivity.this.startActivity(intent);
 		}
 	};
@@ -325,4 +334,16 @@ public class TakePhotoActivity extends Activity {
             return view;
         }
     };*/
+    
+    public void destoryBitmap(Bitmap bitmap) {
+		try {
+			if (bitmap != null && !bitmap.isRecycled()) {
+				bitmap.recycle();
+				bitmap = null;
+			}
+			System.gc();
+		} catch (Exception e) {
+			Log.e("bad thing happened", e.toString(), e);
+		}
+	}
 }

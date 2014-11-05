@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	>
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:id="@+id/btn_back"
+                 android:layout_width="50dp"
+                 android:layout_height="50dp"
+                 android:layout_alignParentLeft="true"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginTop="5dp"
+                 android:background="@drawable/button_back"/>
+        <com.example.CameraDemo.TriButton
+                android:id="@+id/btn_flash_mode"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:background="@drawable/head"/>
+        <Button android:id="@+id/btn_setting"
+                 android:layout_width="50dp"
+                 android:layout_height="50dp"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginTop="5dp"
+                 android:background="@drawable/button_setting"/>
+    </RelativeLayout>
+    <FrameLayout android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+		<RelativeLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="0dip"
+	        android:background="@drawable/photo_frame"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+		    android:layout_weight="1">
+		    <SurfaceView
+		        android:id="@+id/takePicturePreview"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:layout_marginTop="10dp"
+	            android:layout_marginBottom="35dp"
+		        />
+		     <ImageView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+	            android:layout_marginLeft="15dp"
+	            android:layout_marginRight="15dp"
+	            android:layout_marginTop="15dp"
+	            android:layout_marginBottom="20dp"
+	            android:scaleType="fitXY"
+		        android:src="@drawable/photo_mask"
+		        android:alpha="0.5"
+		        />
+		</RelativeLayout>
+    </FrameLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+            <com.example.CameraDemo.HorizontalListView
+                    android:id="@+id/hlv_mask_list"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true">
+            </com.example.CameraDemo.HorizontalListView>
+        </RelativeLayout>
+     <!--   <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+            <com.example.CameraDemo.HorizontalListView
+                    android:id="@+id/hlv_template_list"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="90dp">
+            </com.example.CameraDemo.HorizontalListView>
+            <ImageButton android:layout_width="wrap_content"
+                         android:layout_height="80dp"
+                         android:layout_alignParentRight="true"
+                         android:src="@drawable/head"/>
+        </RelativeLayout>-->
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dip"
+                    android:layout_alignParentBottom="true">
+        <Button android:id="@+id/xxxxx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="更多" />
+        <Button android:id="@+id/take"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="拍照" />
+        <Button
+                android:id="@+id/change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="切换" />
+        </RelativeLayout>
+</RelativeLayout>
