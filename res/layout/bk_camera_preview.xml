@@ -10,7 +10,11 @@
                  android:layout_alignParentLeft="true"
                  android:layout_marginLeft="10dp"
                  android:layout_marginTop="5dp"
+<<<<<<< HEAD
                  android:background="@drawable/button_back"/>
+=======
+                 android:background="@drawable/back"/>
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
         <com.example.CameraDemo.TriButton
                 android:id="@+id/btn_flash_mode"
                  android:layout_width="wrap_content"
@@ -23,7 +27,11 @@
                  android:layout_alignParentRight="true"
                  android:layout_marginRight="10dp"
                  android:layout_marginTop="5dp"
+<<<<<<< HEAD
                  android:background="@drawable/button_setting"/>
+=======
+                 android:background="@drawable/set"/>
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
     </RelativeLayout>
     <FrameLayout android:layout_width="fill_parent" 
         android:layout_height="fill_parent"

@@ -16,6 +16,9 @@
 
         <activity android:name=".TakePhotoActivity" android:screenOrientation="portrait"/>
         <activity android:name=".PhotoPreview" android:screenOrientation="portrait"/>
+<<<<<<< HEAD
         <activity android:name=".DisplayActivity" android:screenOrientation="portrait"/>
+=======
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
     </application>
 </manifest>

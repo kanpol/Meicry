@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -12,11 +13,18 @@ public class CameraDemo extends Activity {
     /**
      * Called when the activity is first created.
      */
+	
+	
+
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.theme_panel);
+
+
+        
 
         /*LinearLayout layout = (LinearLayout) findViewById(R.id.ll_xx);
         Log.i("xxx", String.valueOf(layout));

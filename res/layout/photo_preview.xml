@@ -15,7 +15,11 @@
                    android:layout_width="40dp"
                    android:layout_height="wrap_content"
                    android:layout_marginLeft="10dp"
+<<<<<<< HEAD
                    android:src="@drawable/yyy"/>
+=======
+                   android:src="@drawable/back"/>
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
 
     </RelativeLayout>
 
@@ -40,10 +44,18 @@
             android:layout_alignParentBottom="true">
 
         <ImageView android:layout_width="wrap_content"
+<<<<<<< HEAD
                    android:layout_height="30dp"
                    android:layout_marginTop="5dp"
                    android:layout_marginBottom="5dp"
                    android:layout_centerInParent="true"
                    android:src="@drawable/btn_save_and_share"/>
+=======
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="5dp"
+                   android:layout_marginBottom="5dp"
+                   android:layout_centerInParent="true"
+                   android:src="@drawable/share"/>
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
     </RelativeLayout>
 </RelativeLayout>

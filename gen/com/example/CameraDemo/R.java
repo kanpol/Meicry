@@ -35,6 +35,7 @@ containing a value of this type.
         public static final int state_two=0x7f010001;
     }
     public static final class drawable {
+<<<<<<< HEAD
         public static final int btn_save_and_share=0x7f020000;
         public static final int button_back=0x7f020001;
         public static final int button_setting=0x7f020002;
@@ -68,15 +69,113 @@ containing a value of this type.
         public static final int photo=0x7f050010;
         public static final int take=0x7f050006;
         public static final int takePicturePreview=0x7f050003;
+=======
+        public static final int addtheme=0x7f020000;
+        public static final int back=0x7f020001;
+        public static final int back_click=0x7f020002;
+        public static final int bag=0x7f020003;
+        public static final int bag_click=0x7f020004;
+        public static final int btn_save_and_share=0x7f020005;
+        public static final int cat=0x7f020006;
+        public static final int cat_1=0x7f020007;
+        public static final int cat_1_mask=0x7f020008;
+        public static final int cat_2=0x7f020009;
+        public static final int cat_2_mask=0x7f02000a;
+        public static final int cat_3=0x7f02000b;
+        public static final int cat_3_mask=0x7f02000c;
+        public static final int cat_4=0x7f02000d;
+        public static final int cat_4_mask=0x7f02000e;
+        public static final int cat_5=0x7f02000f;
+        public static final int cat_5_mask=0x7f020010;
+        public static final int circle=0x7f020011;
+        public static final int flashlight_auto=0x7f020012;
+        public static final int flashlight_off=0x7f020013;
+        public static final int flashlight_on=0x7f020014;
+        public static final int head=0x7f020015;
+        public static final int home=0x7f020016;
+        public static final int home_click=0x7f020017;
+        public static final int ic_launcher=0x7f020018;
+        public static final int load_pic=0x7f020019;
+        public static final int more=0x7f02001a;
+        public static final int moretheme=0x7f02001b;
+        public static final int moretheme_click=0x7f02001c;
+        public static final int orbitcam=0x7f02001d;
+        public static final int orbitcam_click=0x7f02001e;
+        public static final int photo=0x7f02001f;
+        public static final int photo_click=0x7f020020;
+        public static final int photo_ex=0x7f020021;
+        public static final int photo_frame=0x7f020022;
+        public static final int photo_mask=0x7f020023;
+        public static final int photo_mask_list_item_bg=0x7f020024;
+        public static final int photo_mask_org=0x7f020025;
+        public static final int set=0x7f020026;
+        public static final int set_click=0x7f020027;
+        public static final int share=0x7f020028;
+        public static final int share_click=0x7f020029;
+        public static final int weather=0x7f02002a;
+        public static final int weibo=0x7f02002b;
+        public static final int weixin=0x7f02002c;
+        public static final int x=0x7f02002d;
+        public static final int yyy=0x7f02002e;
+        public static final int zone=0x7f02002f;
+    }
+    public static final class id {
+        public static final int btn_back=0x7f050000;
+        public static final int btn_back_home=0x7f05001a;
+        public static final int btn_bag=0x7f05001b;
+        public static final int btn_change=0x7f050013;
+        public static final int btn_flash_mode=0x7f050001;
+        public static final int btn_home=0x7f050022;
+        public static final int btn_save=0x7f050012;
+        public static final int btn_setting=0x7f050002;
+        public static final int camera_bottom=0x7f05000a;
+        public static final int camera_top=0x7f050008;
+        public static final int change=0x7f050007;
+        public static final int grid_item_image=0x7f05000e;
+        public static final int grid_view=0x7f05000d;
+        public static final int grid_view_bg=0x7f05000c;
+        public static final int hlv_mask_list=0x7f050004;
+        public static final int iv_back=0x7f05000f;
+        public static final int iv_mask=0x7f050014;
+        public static final int iv_mode=0x7f050010;
+        public static final int iv_setting=0x7f050011;
+        public static final int ll_xx=0x7f050020;
+        public static final int load=0x7f05001f;
+        public static final int more=0x7f05000b;
+        public static final int photo=0x7f050017;
+        public static final int photo_preview_bottom=0x7f050018;
+        public static final int photo_preview_content=0x7f050016;
+        public static final int photo_preview_top=0x7f050015;
+        public static final int take=0x7f050006;
+        public static final int takeMask=0x7f050009;
+        public static final int takePicturePreview=0x7f050003;
+        public static final int theme_details_bottom=0x7f05001d;
+        public static final int theme_details_center=0x7f05001c;
+        public static final int theme_details_grid_view=0x7f05001e;
+        public static final int theme_details_top=0x7f050019;
+        public static final int third_party_share_bottom=0x7f050024;
+        public static final int third_party_share_center=0x7f050023;
+        public static final int third_party_share_top=0x7f050021;
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
         public static final int xxxxx=0x7f050005;
     }
     public static final class layout {
         public static final int bk_camera_preview=0x7f030000;
         public static final int camera_preview=0x7f030001;
+<<<<<<< HEAD
         public static final int main=0x7f030002;
         public static final int photo_mask_list_item=0x7f030003;
         public static final int photo_preview=0x7f030004;
         public static final int theme_panel=0x7f030005;
+=======
+        public static final int item=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int photo_mask_list_item=0x7f030004;
+        public static final int photo_preview=0x7f030005;
+        public static final int theme_details=0x7f030006;
+        public static final int theme_panel=0x7f030007;
+        public static final int third_party_share=0x7f030008;
+>>>>>>> 7bd806a6fa5fe15f3efc2c4314b650e5040f82d7
     }
     public static final class string {
         public static final int app_name=0x7f040000;
